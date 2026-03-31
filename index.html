@@ -90,25 +90,25 @@
         <div id="lineName"></div>
       </div>
 
-      <div class="mb-3">
-        <div style="display: flex; align-items: center; margin-bottom: 15px;">
-          <label for="term" style="margin: 0; margin-right: 15px; white-space: nowrap;">ปีการศึกษา:</label>
-          <input type="text" id="term" name="term" required readonly class="form-control" style="background-color: #e9ecef;">
-        </div>
-
-        <label for="selectsubject">รายวิชา:</label>
-        <input id="selectsubject" name="subject" required readonly class="form-control" onclick="openQRModal()" placeholder=" คลิกเพื่อสแกนคิวอาร์โค้ด" style="cursor: pointer;">
-
-        <div id="qrModal" class="modal">
-            <div class="modal-content">
-                <h2 style="font-size: 50px;">สแกน QR Code</h2>
-                <div id="reader"></div>
-                <button id="cancelBtn" type="button" style="font-size: 50px; color: red; font-weight: bold;">ยกเลิก</button>
-            </div>
-        </div>
-        <div id="loadingSpinner"><div class="spinner"></div></div>
+      <div class="input-container">
+        <label for="term">ปีการศึกษา:</label>
+        <input type="text" id="term" name="term" required readonly style="font-size: 2.5rem; background-color: #e9ecef;" class="fa form-control form-control-lg" placeholder="ดึงข้อมูลอัตโนมัติ">
       </div>
-      
+
+      <div class="input-container">
+        <label for="selectsubject">รายวิชา:</label>
+        <input id="selectsubject" name="subject" required readonly style="font-size: 2.5rem; cursor: pointer;" class="fa form-control form-control-lg" onclick="openQRModal()" placeholder=" คลิกเพื่อสแกนคิวอาร์โค้ด">
+      </div>
+
+      <div id="qrModal" class="modal">
+          <div class="modal-content">
+              <h2 style="font-size: 50px;">สแกน QR Code</h2>
+              <div id="reader"></div>
+              <button id="cancelBtn" type="button" style="font-size: 50px; color: red; font-weight: bold;">ยกเลิก</button>
+          </div>
+      </div>
+      <div id="loadingSpinner"><div class="spinner"></div></div>
+
       <div class="input-container">
         <div class="label-stdid">
             <span style="width:100%"><label for="studentid">รหัสนักศึกษา:</label></span>

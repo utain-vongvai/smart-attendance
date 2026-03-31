@@ -73,8 +73,7 @@
   </div>
 
   <header>
-    <h1 class="h1-large"><i class="fa fa-signal" style="font-size:60px;color:red"></i> ระบบเช็คชื่อออนไลน์</h1>
-    <p style="color:white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทำรายการผ่านสมาร์ทโฟนของตนเองเท่านั้น</p>
+    <h2 class="h1-large"><i class="fa fa-signal" style="font-size:60px;color:red"></i> ระบบเช็คชื่อออนไลน์</h2>
   </header>
   
   <div class="flex-container">
@@ -89,15 +88,13 @@
         <img id="profilePic" src="">
         <div id="lineName"></div>
       </div>
-
-      <div class="input-container">
-        <label for="term">ปีการศึกษา:</label>
-        <input type="text" id="term" name="term" required readonly style="font-size: 2.5rem; background-color: #e9ecef;" class="fa form-control form-control-lg" placeholder="ดึงข้อมูลอัตโนมัติ">
-      </div>
-
       <div class="input-container">
         <label for="selectsubject">รายวิชา:</label>
         <input id="selectsubject" name="subject" required readonly style="font-size: 2.5rem; cursor: pointer;" class="fa form-control form-control-lg" onclick="openQRModal()" placeholder=" คลิกเพื่อสแกนคิวอาร์โค้ด">
+      </div>
+      <div class="input-container">
+        <label for="term">ปีการศึกษา:</label>
+        <input type="text" id="term" name="term" required readonly style="font-size: 2.5rem; background-color: #e9ecef;" class="fa form-control form-control-lg" placeholder="ดึงข้อมูลอัตโนมัติ">
       </div>
 
       <div id="qrModal" class="modal">

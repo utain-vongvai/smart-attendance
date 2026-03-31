@@ -3,7 +3,7 @@
 <head>
   <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=320; initial-scale=0.9; maximum-scale=1.0; user-scalable=0;" />
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.min.css">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anta&family=Prompt:wght@300;400;500;600&family=Michroma&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anta&family=Bungee+Inline&family=Bungee+Spice&family=Honk&family=Michroma&display=swap" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
@@ -21,269 +21,71 @@
   <title>ระบบเช็คชื่อออนไลน์</title>
 
   <style>
-    /* ปรับแต่ง UI ให้ดูเป็นมืออาชีพสำหรับมือถือ */
-    body { 
-      font-family: 'Prompt', sans-serif; 
-      font-size: 16px; /* ปรับขนาดฟอนต์ฐาน */
-      background-color: #f4f7f6;
-      margin: 0; padding: 0; 
-      min-height: 100vh; display: flex; flex-direction: column; 
-    }
-    .container { 
-      background-color: white; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
-      margin: 15px auto 60px auto; 
-      max-width: 900px; 
-      padding: 25px; 
-    }
-    .input-container { margin-bottom: 18px; }
-    .input-container-checkbox { text-align: right; margin: 15px 0; font-size: 1.1rem; }
-    
-    label { 
-      display: block; 
-      margin-bottom: 8px; 
-      font-size: 1.1rem; 
-      font-weight: 600; 
-      color: #333;
-    }
-    input { 
-      width: 100%; 
-      border: 1px solid #ced4da; 
-      border-radius: 8px; 
-    }
-    input.form-control {
-      font-size: 1.1rem !important; /* ปรับขนาด input */
-      padding: 12px 15px !important;
-    }
-    input[type="checkbox"] { border: 2px solid #555; width: auto; }
-    input.transparent-text { all: unset; color: transparent; display: none; }
-
-    header { 
-      background-image: url("https://www.w3schools.com/w3images/lights.jpg"); 
-      background-size: cover; 
-      background-position: center; 
-      border-radius: 0 0 15px 15px; 
-      padding: 25px 20px; 
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .h1-large { font-size: 2.2rem; color: white; margin-bottom: 5px; font-weight: bold; }
-    header p { color: rgba(255,255,255,0.9); font-size: 1rem; margin: 0; }
-
-    .btn-submit { 
-      background: linear-gradient(180deg, #4A6BDC 0%, #1F347A 100%); 
-      border: none;
-      border-radius: 50px; 
-      color: white; 
-      padding: 12px 25px; 
-      width: 100%; 
-      font-size: 1.5rem;
-      font-weight: bold;
-      transition: all 0.2s ease; 
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    }
-    .btn-submit:active { transform: translateY(2px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-    
-    footer { background-color: #222; text-align: center; padding: 10px; position: fixed; bottom: 0; left: 0; width: 100%; font-size: 0.9rem; color: #ccc; z-index: 10; }
-    
-    #clock { font-family: "Michroma", sans-serif; font-size: 1.3rem; font-weight: bold; color: #333; }
-    .flex-container { margin: 15px 20px 5px 20px; display: flex; align-items: center; justify-content: flex-end; }
-    
-    .container-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .container-header .column-1 { font-size: 1.2rem; font-weight: bold; }
-    .container-header .column-2 { font-size: 1rem; color: #666; }
-    .container-header .column-3 { font-size: 1.1rem; font-weight: bold; color: #1DB446; text-align: right;}
-
-    /* ปรับปรุงกล่อง Profile LINE */
-    #profileBox {
-      display: none; 
-      text-align: center; 
-      margin-bottom: 25px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      border: 1px solid #eee;
-    }
-    #profilePic {
-      width: 90px; 
-      height: 90px; 
-      border-radius: 50%; 
-      border: 3px solid #1DB446; 
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-      object-fit: cover;
-    }
-    #lineName {
-      font-size: 1.2rem; 
-      font-weight: bold; 
-      margin-top: 10px; 
-      color: #333;
-    }
-
-    /* สไตล์ Modal & Loader */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; z-index: 9999; }
-    .modal-content { background: white; padding: 20px; border-radius: 12px; text-align: center; width: 90%; max-width: 400px; }
-    .modal-content h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    #cancelBtn { margin-top: 15px; font-size: 1.2rem; color: white; background-color: #dc3545; border: none; padding: 10px 20px; border-radius: 8px; width: 100%; }
-    
-    #loadingSpinner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 99999; }
-    .spinner { border: 6px solid #f3f3f3; border-top: 6px solid #1DB446; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; }
+    /* สไตล์ดั้งเดิมของคุณทั้งหมด */
+    body { font-family: Arial, sans-serif; font-size: 25px; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    .container { background-color: white; border-radius: 15px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 0px auto 60px auto; max-width: 900px; padding: 20px; position: relative; top: 10px; }
+    .input-container { margin-bottom: 10px; }
+    .input-container-checkbox{ text-align : right; margin: 25px 0; }
+    label { display: block; margin-bottom: 5px; font-size:2.5rem; font-weight: bold; }
+    input { width: 100%; padding: 20px; border: 1px solid #ccc; border-radius: 4px; }
+    input[type="checkbox"] { border: 2px solid black; }
+    input.transparent-text{ all: unset; color:transparent; }
+    h1 { font-size: 3.5rem; color: white; }
+    header { background-image: url("https://www.w3schools.com/w3images/lights.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 15px 15px 0px 0px; top: 0; left: 0; width: 100%; z-index: 1; padding: 20px; }
+    @media (max-width: 768px) { .container { max-width: 100%; } .container-header { flex-direction: column; } .column-1, .column-2, .column-3 { width: 100%; } .column-2 { order: 1; } .column-3 { order: 2; } .column-1 { order: 3; } }
+    .btn { background: #6C8FFF; border: solid 1px #6C8FFF; background: linear-gradient(180deg, #6C8FFF 0%, #2A4395 35%, #09184B 100%); border-radius: 50px; color: white; padding: .75rem 1.5rem; width: 350px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    footer { background-color: black; text-align: center; padding: 5px; border-radius: 0px 0px 15px 15px; position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; font-size: 20px; color: white; }
+    .hidden { display: none; }
+    #clock { font-family: "Michroma", sans-serif; font-weight: 900; font-size:2rem; font-style: normal; text-align: left; white-space: nowrap; }
+    .flex-container { margin: 20px auto 5px auto; display: flex; }
+    .flex-container > div { width:100%; margin:3px; font-size: 30px; }
+    .label-stdid { display: flex; flex-flow: row nowrap; }
+    .container-header { display: flex; flex-wrap: wrap; margin:0px 0px 15px 0px; }
+    .column-1 { width: 45%; height: 2.5rem; text-align: left; line-height: 2rem; font-size:2.5rem; font-weight: bold; }
+    .column-2 { width: 40%; height: 2.5rem; text-align: right; line-height: 2rem; padding:0px 10px 0px 0px; }
+    .column-3 { width: 15%; height: 2.5rem; text-align: left; line-height: 2rem; }
+    .swal2-popup { font-size: 2rem !important; width: 90% !important; max-width: 550px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 99999; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; text-align: center; }
+    #loadingSpinner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 9999; }
+    .spinner { border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 80px; height: 80px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    #successScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
+    .success-container { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 20px; padding: 60px; width: 90%; max-width: 675px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+    .success-container h1 { font-size: 4.4rem; margin-bottom: 15px; color: #fff; }
+    .success-message { font-size: 2.4rem; margin: 20px 0; color: rgba(255, 255, 255, 0.9); }
+    .success-icon { font-size: 8rem; margin-bottom: 20px; }
 
-    /* หน้าจอ Success */
-    #successScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1DB446 0%, #128C33 100%); z-index: 100000; justify-content: center; align-items: center; padding: 20px; }
-    .success-container { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); animation: successFadeIn 0.5s ease; color: white; }
-    @keyframes successFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    .success-container h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: bold; }
-    .success-icon { font-size: 5rem; margin-bottom: 15px; }
+    /* สไตล์กล่องรูปโปรไฟล์ (ที่ประกอบร่างมาให้แล้ว) */
+    #profileBox { display: none; text-align: center; margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    #profilePic { width: 130px; height: 130px; border-radius: 50%; border: 4px solid #1DB446; box-shadow: 0 4px 8px rgba(0,0,0,0.2); object-fit: cover; }
+    #lineName { font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333; }
   </style>
-
-  <script>
-    // ==========================================
-    // Core Functions & Swal Replacements
-    // ==========================================
-    function preventFormSubmit() {
-      var forms = document.querySelectorAll('form');
-      for (var i = 0; i < forms.length; i++) {
-        forms[i].addEventListener('submit', function(event) { event.preventDefault(); });
-      }
-    }
-    window.addEventListener("load", preventFormSubmit, true);  
-
-    function handleFormSubmit(formObject) {
-      if (document.getElementById("selectsubject").value.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณาสแกนคิวอาร์โค้ดรายวิชา' }); return;
-      }
-      if (document.getElementById("studentid").value.length !== 13) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณากรอกรหัสนักศึกษา 13 หลัก' }); return;
-      }
-      if (document.getElementById("location").value.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณาเปิดการตั้งค่าตำแหน่งที่ตั้ง (Location) ในมือถือ' }); return;
-      }
-      if (document.getElementById("ip-address").value.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'พบข้อผิดพลาด IP กรุณาติดต่ออาจารย์' }); return;
-      }
-      if (document.getElementById("term").value.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'พบข้อผิดพลาดภาคเรียน กรุณาติดต่ออาจารย์' }); return;
-      }
-      if (document.getElementById("guid").value.length === 0) {
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'พบข้อผิดพลาด Device ID กรุณาติดต่ออาจารย์' }); return;
-      }
-      if (document.getElementById("isInArea").value !== "true") {
-        google.script.run.SubmitLogs(formObject);
-        Swal.fire({ icon: 'error', title: 'อยู่นอกพื้นที่', text: 'กรุณาตรวจสอบพิกัด หรือติดต่ออาจารย์ผู้สอน' }); return;
-      }
-
-      Swal.fire({
-        title: 'กำลังบันทึกข้อมูล...',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
-
-      google.script.run
-        .withSuccessHandler(function(result) {
-          if (result.success) {
-            Swal.close();
-            document.getElementById('successScreen').style.display = 'flex';
-          } else {
-            Swal.fire({ title: "ไม่พบข้อมูล", text: result.message || "ไม่พบข้อมูลในระบบ", icon: "error", confirmButtonText: "ตกลง" });
-          }
-        })
-        .withFailureHandler(function(error) {
-          Swal.fire({ title: "เกิดข้อผิดพลาด", text: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่", icon: "error" });
-        })
-        .addnewdata(formObject);
-    }
-
-    // ==========================================
-    // LIFF Integration
-    // ==========================================
-    const MY_LIFF_ID = "2009635012-9PdjarWn"; // <--- LIFF ID ของคุณ
-
-    async function initializeLiff() {
-      try {
-        await liff.init({ liffId: MY_LIFF_ID });
-        
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          Swal.fire({ title: 'กำลังตรวจสอบข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-          const profile = await liff.getProfile();
-          
-          // แสดงรูปโปรไฟล์ LINE
-          if(profile.pictureUrl) { document.getElementById('profilePic').src = profile.pictureUrl; }
-          document.getElementById('lineName').innerText = profile.displayName;
-          document.getElementById('profileBox').style.display = "block";
-          
-          google.script.run
-            .withSuccessHandler(function(result) {
-              if(result.success) {
-                Swal.close();
-                document.getElementById('studentid').value = result.studentId;
-                document.getElementById('fullname').value = result.fullname;
-                countChars(document.getElementById('studentid'));
-              } else {
-                Swal.fire({ icon: 'error', title: 'ไม่พบสิทธิ์เข้าใช้งาน', text: result.message }).then(() => { liff.closeWindow(); });
-              }
-            })
-            .withFailureHandler(function(error) {
-              Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
-            })
-            .getStudentInfoByLineId(profile.userId);
-        }
-      } catch (err) {
-        Swal.fire('ข้อผิดพลาด', 'LIFF ไม่สามารถทำงานได้', 'error');
-      }
-    }
-
-    // ==========================================
-    // Onload Script
-    // ==========================================
-    function runScript(){
-      document.getElementById("loadingSpinner").style.display = "flex";
-      displayCurrentTime();
-      
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      
-      if(isMobile){
-        document.getElementById("loadingSpinner").style.display = "none";
-        document.getElementById("isMobilephone").value = true;
-        initializeGUID();
-        initializeLiff(); 
-      } else {
-        document.getElementById("loadingSpinner").style.display = "none";
-        document.getElementById("isMobilephone").value = false;
-        Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'ใช้สมาร์ทโฟนในการเข้าใช้งานเท่านั้น!', allowOutsideClick: false });
-      }
-    }
-  </script>
 </head>
 
 <body onload="runScript()">
   <div id="successScreen">
     <div class="success-container">
-        <div class="success-icon">✅</div>
-        <h1>เช็คชื่อสำเร็จ!</h1>
-        <p class="success-message">เช็คข้อความส่งผ่านทางไลน์เพื่อยืนยัน</p>
+        <div class="success-icon">✅</div><h1>เช็คชื่อสำเร็จ!</h1>
+        <p class="success-message">เช็คข้อความส่งผ่านทางไลน์</p>
+        <p class="success-message">เพื่อเป็นการยืนยันความถูกต้อง</p>
     </div>
   </div>
 
   <header>
-    <h1 class="h1-large"><i class="fa fa-signal" style="color:#1DB446"></i> AJA Smart</h1>
-    <p>ทำรายการผ่านสมาร์ทโฟนของตนเองเท่านั้น</p>
+    <h1 class="h1-large"><i class="fa fa-signal" style="font-size:60px;color:red"></i> ระบบเช็คชื่อออนไลน์</h1>
+    <p style="color:white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทำรายการผ่านสมาร์ทโฟนของตนเองเท่านั้น</p>
   </header>
   
   <div class="flex-container">
-    <i class="fa fa-clock-o" style="font-size:1.5rem; color:#1DB446; margin-right:8px;"></i>
+    <div style="text-align:right;flex:70%"><i class="fa fa-clock-o" style="font-size:50px;color:red;"></i></div>
     <div id="clock"></div>
   </div>
   
   <div class="container">
     <div class="input-container-checkbox" id="online">
-      <span style="font-size:1.2rem; color:gray;"><i class="fa fa-user"></i> ออฟไลน์</span> 
+      <p style="font-size:32px"><i class="fa fa-user" style="font-size:32px;color:Gray"></i> ออฟไลน์</p> 
     </div>
-    
     <form id="main-form" onsubmit="handleFormSubmit(this)">
       
       <div id="profileBox">
@@ -293,163 +95,242 @@
 
       <div class="mb-3">
         <div class="container-header">
-          <div class="column-1">รายวิชา</div>
-          <div class="column-2">เทอม:</div>
-          <div class="column-3">
-             <input type="text" id="term" name="term" style="all:unset; width:100%;" readonly required>
-          </div>
+          <div class="column-1">รายวิชา</div><div class="column-2">ปีการศึกษา</div>
+          <div class="column-3"><input type="text" id="term" name="term" style="all:unset" readonly required></div>
         </div>
-        
-        <input id="selectsubject" name="subject" required readonly class="form-control" onclick="openQRModal()" placeholder=" คลิกเพื่อสแกนคิวอาร์โค้ด">
+        <input id="selectsubject" name="subject" required readonly style="font-size: 2.5rem" class="fa form-control form-control-lg" onclick="openQRModal()" placeholder=" คลิกเพื่อสแกนคิวอาร์โค้ด">
 
         <div id="qrModal" class="modal">
             <div class="modal-content">
-                <h2>สแกน QR Code รายวิชา</h2>
+                <h2 style="font-size: 50px;">สแกน QR Code</h2>
                 <div id="reader"></div>
-                <button id="cancelBtn" type="button">ยกเลิก</button>
+                <button id="cancelBtn" type="button" style="font-size: 50px; color: red; font-weight: bold;">ยกเลิก</button>
             </div>
         </div>
-        
         <div id="loadingSpinner"><div class="spinner"></div></div>
       </div>
       
       <div class="input-container">
-        <div class="label-stdid" style="justify-content: space-between;">
-            <label for="studentid">รหัสนักศึกษา:</label>
-            <span id="charNum"></span>
+        <div class="label-stdid">
+            <span style="width:100%"><label for="studentid">รหัสนักศึกษา:</label></span>
+            <span id="charNum" style="text-align:right;margin:15px 0px 0px 0px;"></span>
         </div>
-        <input inputmode="numeric" id="studentid" name="studentid" pattern="[0-9]{13}" required readonly class="form-control" style="background-color: #e9ecef;" placeholder="ดึงข้อมูลอัตโนมัติ" onkeyup="countChars(this);">
+        <input inputmode="numeric" id="studentid" name="studentid" pattern="[0-9]{13}" required readonly style="font-size: 2.5rem; background-color: #e9ecef;" class="fa form-control form-control-lg" placeholder="ดึงข้อมูลอัตโนมัติ">
       </div>
       
       <div class="input-container">
         <label for="fullname">ชื่อ-สกุล:</label>
-        <input type="text" id="fullname" name="fullname" required readonly class="form-control" style="background-color: #e9ecef;" placeholder="ดึงข้อมูลอัตโนมัติ">
+        <input type="text" id="fullname" name="fullname" required readonly style="font-size: 2.5rem; background-color: #e9ecef;" class="fa form-control form-control-lg" placeholder="ดึงข้อมูลอัตโนมัติ">
       </div>
       
-      <hr style="margin: 25px 0; border-top: 1px solid #ddd;">
-
-      <p style="font-size:1rem; color:#555;"><i class="fa fa-map-marker" style="color:#dc3545"></i> กรุณา 'อนุญาต' ให้เข้าถึงตำแหน่งที่ตั้ง</p>
-      <p style="font-size:1rem; color:#555;"><i class="fa fa-check-circle" style="color:#1DB446"></i> ทำการเช็คชื่อ 2 รอบ (เข้าคลาส / ออกคลาส)</p>
-      <p style="font-size:1rem; color:#dc3545; font-weight:bold;"><i class="fa fa-ban"></i> ไม่อนุญาตให้เช็คชื่อแทนกัน</p>
+      <br><br>
+      <p style="font-size:2.0rem"><i class="fa fa-map-marker" style="font-size:50px;color:red"></i> กรุณา 'อนุญาต' ให้ใช้ตำแหน่งที่ตั้ง</p>
+      <p style="font-size:2.0rem"><i class="fa fa-check-circle" style="font-size:30px;color:Green"></i> ทำการเช็คชื่อ 2 รอบคือ 'เข้าคลาส' และ 'ออกคลาส'</p>
+      <p style="font-size:2.0rem;color:red"><i class="fa fa-ban" style="font-size:30px;color:Red"></i> ไม่อนุญาต ให้เช็คชื่อบุคคลอื่น ผ่านสมาร์ทโฟนของตนเอง</p>
       
       <input class="transparent-text" type="text" id="ip-address" name="ipaddress" required readonly>
       <input class="transparent-text" type="text" id="location" name="location" required readonly>
+      <br>
       
       <div class="input-container-checkbox">
-        <label for ="accept" style="display:inline-block; font-size:1.1rem; cursor:pointer;">
-          <input class="form-check-input" type="checkbox" id="accept" name="checkbox" required> <span style="color:#dc3545">ยอมรับเงื่อนไข</span>
-        </label>
+        <label for ="accept"><input class="form-check-input" type="checkbox" id="accept" name="checkbox" required> <font style="color:red">ยอมรับเงื่อนไข</font></label>
       </div>
-      
-      <button type="submit" class="btn-submit">เช็คชื่อ</button>
-      
-      <div style="text-align:center; margin-top:20px; font-size:0.9rem; color:#777;">
-        <p>กรณีมีปัญหาการใช้งาน กรุณาติดต่ออาจารย์ผู้สอน</p>
-      </div>
-      
-      <input style="display:none;" type="text" id="guid" name="guid" required readonly>
+      <br>
+      <div class="d-grid gap-2 mt-4 justify-content-center"><button type="submit" class="btn" style="font-size: 3rem;">เช็คชื่อ</button></div>
+      <div class="d-grid gap-2 mt-4 justify-content-center"><br><p><strong>กรณีมีปัญหาในการใช้งานกรุณาติดต่ออาจารย์ผู้สอน</strong></p></div>
+      <div class="d-flex align-items-center"><input style="border:none; text-align:left; flex-shrink: 1" type="text" id="guid" name="guid" required readonly hidden></div>
+      <span id="deviceid"></span>
       <div hidden><input type="text" id="isInArea"><input type="text" id="isMobilephone"></div>
     </form>
   </div>
 
-  <footer>
-    Copyright © 2024 Utain Vongvai (AKE) , All rights reserved.
-  </footer>
+  <footer><p>Copyright © 2024 Utain Vongvai (AKE) , All rights reserved.</p></footer>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   
   <script>
-    // ดึงค่า IP Address
-    $(document).ready(() => {
-      $.getJSON("https://api.ipify.org?format=json", function (data) { $("#ip-address").val(data.ip); });
-    });
+    // ==========================================
+    // ตัวแปรสำคัญ (แก้ตรงนี้เลยครับ!)
+    // ==========================================
+    const MY_LIFF_ID = "2009635012-9PdjarWn"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyg9dqrhso9ZSP1w0En18fCVm2-T6cn4lCrviMMf4b5byFklrQoPdQyv6I-ZtzQLXiwqw/exec"; 
+    // ==========================================
 
-    // ดึงค่า Location
-    const x = document.getElementById("location");
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else { x.value = "Geolocation is not supported."; }
-    
-    function showPosition(position) {
-      x.value = position.coords.latitude + "," + position.coords.longitude;
-      google.script.run.withSuccessHandler(inArea).isInArea(x.value);
-    }
-    function inArea(result){ document.getElementById("isInArea").value = result; }
-  
-    // นาฬิกา
-    function displayCurrentTime() {
-      const now = new Date();
-      document.getElementById("clock").innerText = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
-      setTimeout(displayCurrentTime, 1000);
+    // ระบบ API สำหรับคุยกับหลังบ้าน (ใช้ Fetch แทน google.script.run)
+    async function callAPI(action, payload) {
+      try {
+        const response = await fetch(GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: action, ...payload }),
+          redirect: "follow"
+        });
+        const text = await response.text();
+        try { return JSON.parse(text); } 
+        catch(e) { throw new Error("ตั้งค่า GAS_URL ผิด หรือ ลืมตั้งสิทธิ์เป็นทุกคน"); }
+      } catch (error) { throw new Error(error.message); }
     }
 
-    // นับตัวอักษร
-    function countChars(obj){
-      let charNum = document.getElementById("charNum");
-      if(obj.value.length > 0 && obj.value.length < 14){
-        if(obj.value.length == 13){ charNum.innerHTML = "<i class='fa fa-check' style='color:#1DB446'></i>"; } 
-        else { charNum.innerHTML = obj.value.length + "/13"; charNum.style.color = "#555"; }
-      } else {
-        if(obj.value.length > 13){ charNum.innerHTML = "<i class='fa fa-times' style='color:#dc3545'></i>"; } 
-        else { charNum.innerHTML = ""; }
+    function getFormDataAsObject(formNode) {
+      const formData = new FormData(formNode);
+      const obj = {};
+      formData.forEach((value, key) => obj[key] = value);
+      return obj;
+    }
+
+    // จุดที่ 2: ระบบ LIFF (ประกอบร่างมาให้แล้ว)
+    async function initializeLiff() {
+      try {
+        await liff.init({ liffId: MY_LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          Swal.fire({ title: 'กำลังโหลดข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+          const profile = await liff.getProfile();
+          
+          // โชว์รูปโปรไฟล์
+          if(profile.pictureUrl) { document.getElementById('profilePic').src = profile.pictureUrl; }
+          document.getElementById('lineName').innerText = profile.displayName;
+          document.getElementById('profileBox').style.display = "block";
+          
+          try {
+            const result = await callAPI('getStudentInfoByLineId', { userId: profile.userId });
+            if(result.success) {
+              Swal.close();
+              document.getElementById('studentid').value = result.studentId;
+              document.getElementById('fullname').value = result.fullname;
+              countChars(document.getElementById('studentid'));
+            } else {
+              Swal.fire('ข้อความแจ้งเตือน', result.message, 'error').then(() => { liff.closeWindow(); });
+            }
+          } catch(err) {
+            Swal.fire('ข้อผิดพลาด', 'ติดต่อฐานข้อมูลไม่สำเร็จ: ' + err.message, 'error');
+          }
+        }
+      } catch (err) {
+        Swal.fire('ข้อผิดพลาด', 'LIFF ไม่สามารถทำงานได้', 'error');
       }
     }
 
-    // Device ID
+    function preventFormSubmit() {
+      var forms = document.querySelectorAll('form');
+      for (var i = 0; i < forms.length; i++) { forms[i].addEventListener('submit', function(event) { event.preventDefault(); }); }
+    }
+    window.addEventListener("load", preventFormSubmit, true);  
+
+    async function handleFormSubmit(formNode) {
+      if (document.getElementById("selectsubject").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "กรุณาสแกนคิวอาร์โค้ดรายวิชา", icon: "warning"}); return; }
+      if (document.getElementById("studentid").value.length !== 13) { Swal.fire({title: "แจ้งเตือน", text: "กรุณากรอกรหัสนักศึกษา 13 หลัก", icon: "warning"}); return; }
+      if (document.getElementById("location").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "กรุณาเปิด Location", icon: "warning"}); return; }
+      if (document.getElementById("ip-address").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาด 'IP'", icon: "warning"}); return; }
+      if (document.getElementById("term").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาดข้อมูล 'ภาคเรียน'", icon: "warning"}); return; }
+      if (document.getElementById("guid").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาด 'Device id'", icon: "warning"}); return; }
+      
+      const formObject = getFormDataAsObject(formNode);
+
+      if (document.getElementById("isInArea").value !== "true") {
+        await callAPI('SubmitLogs', { formObject: formObject });
+        Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาดตำแหน่งที่ตั้ง (Location)", icon: "error"}); return;
+      }
+
+      Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+
+      try {
+        const result = await callAPI('addnewdata', { formObject: formObject });
+        if (result.success) { 
+          Swal.close(); document.getElementById('successScreen').style.display = 'flex'; 
+        } else { 
+          Swal.fire({ title: "ไม่พบข้อมูล", text: result.message, icon: "error" }); 
+        }
+      } catch (error) {
+        Swal.fire({ title: "เกิดข้อผิดพลาด", text: "ไม่สามารถบันทึกข้อมูลได้", icon: "error" });
+      }
+    }
+
+    function runScript(){
+      displayCurrentTime();
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      if(isMobile){
+        document.getElementById("isMobilephone").value=true;
+        initializeGUID();
+        initializeLiff(); 
+      } else {
+        Swal.fire({title: "แจ้งเตือน", text: "ใช้สมาร์ทโฟน (Smart phone) ในการเข้าใช้งานเท่านั้น !!!", icon: "warning"});
+        document.getElementById("isMobilephone").value=false;
+      }
+    }
+
+    // Utilities
+    $(document).ready(()=>{ $.getJSON("https://api.ipify.org?format=json", function (data) { $("#ip-address").val(data.ip); }) });
+
+    const x = document.getElementById("location");
+    if (navigator.geolocation) { navigator.geolocation.getCurrentPosition(showPosition); } else { x.value = "Geolocation not supported."; }
+    async function showPosition(position) {
+      x.value = position.coords.latitude + "," + position.coords.longitude;
+      try { const res = await callAPI('isInArea', { location: x.value }); document.getElementById("isInArea").value = res; } catch (e) {}
+    }
+  
+    function displayCurrentTime() {
+      const now = new Date();
+      document.getElementById("clock").innerText = `${now.getHours().toString().padStart(2, "0")} : ${now.getMinutes().toString().padStart(2, "0")} : ${now.getSeconds().toString().padStart(2, "0")}`;
+      setTimeout(displayCurrentTime, 1000);
+    }
+
+    function countChars(obj){
+      let charNum = document.getElementById("charNum");
+      if(obj.value.length == 13){ charNum.innerHTML = "<i class='fa fa-check' style='font-size:30px;color:#00ff00'></i>"; }
+      else if (obj.value.length > 13) { charNum.innerHTML = "<i class='fa fa-times' style='font-size:30px;color:Red'></i>"; }
+      else { charNum.innerHTML = obj.value.length ? obj.value.length+"/13" : ""; charNum.style.color = "black"; }
+    }
+
     async function initializeGUID() {
       try {
         const guidElement = document.getElementById('guid');
-        if (localStorage.getItem('guid') !== null) {
-          guidElement.value = localStorage.getItem('guid');
-        } else {
+        let guid = localStorage.getItem('guid');
+        if (!guid) {
           const fp = await FingerprintJS.load();
-          const result = await fp.get();
-          guidElement.value = result.visitorId;
-          localStorage.setItem('guid', result.visitorId);
+          guid = (await fp.get()).visitorId;
+          localStorage.setItem('guid', guid);
         }
-      } catch (error) { console.error("Error GUID"); }
+        guidElement.value = guid;
+        document.getElementById("deviceid").textContent = "Device id : " + guid;
+      } catch (error) { console.error(error); }
     }
 
-    // สแกน QR Code
     let scanner;
     function openQRModal() {
-      if(document.getElementById("isMobilephone").value == "true"){
+      if(document.getElementById("isMobilephone").value=="true"){
         document.getElementById("qrModal").style.display = "flex";
-        startScanner();
-      } else { Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'ใช้สมาร์ทโฟนเท่านั้น!' }); }
+        scanner = new Html5Qrcode("reader");
+        scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 500 }, async (decodedText) => {
+            scanner.stop().then(async () => {
+                document.getElementById("loadingSpinner").style.display = "flex";
+                try {
+                  const response = await callAPI('verifyQRCode', { decodedText: decodedText });
+                  document.getElementById("loadingSpinner").style.display = "none";
+                  if(response && response.length > 0){
+                      document.getElementById("term").value = response[0][0];
+                      document.getElementById("selectsubject").value = response[0][1];
+                      document.getElementById("online").innerHTML = "<p style='font-size:32px'><i class='fa fa-user' style='font-size:32px;color:Green'></i> กำลังออนไลน์</p>";
+                  }else{
+                    Swal.fire({ icon: "error", title: "Oops !!!", text: "คิวอาร์โค้ดไม่ถูกต้อง", customClass: { popup: 'swal2-popup' }, allowOutsideClick: false });
+                  }
+                } catch(e) {
+                  document.getElementById("loadingSpinner").style.display = "none";
+                  Swal.fire({ icon: "error", title: "Error", text: "ตรวจสอบ QR Code ไม่ได้", customClass: { popup: 'swal2-popup' } });
+                }
+                closeQRModal();
+            });
+        }, (err) => { console.log(err); }).catch((err) => { alert("ผู้ใช้ปฏิเสธกล้อง"); closeQRModal(); });
+      } else { Swal.fire({title: "แจ้งเตือน", text: "สมาร์ทโฟนเท่านั้น !!!", icon: "warning"}); }
     }
 
     function closeQRModal() {
-      document.getElementById("qrModal").style.display = "none"; 
-      if (scanner) { scanner.stop().catch(err => console.error(err)); }
+        document.getElementById("qrModal").style.display = "none"; 
+        if (scanner) { scanner.stop().catch(err => console.log(err)); }
     }
     document.getElementById("cancelBtn").addEventListener("click", closeQRModal);
-
-    function startScanner() {
-      scanner = new Html5Qrcode("reader");
-      scanner.start(
-        { facingMode: "environment" }, { fps: 10, qrbox: 250 }, 
-        (decodedText) => {
-          scanner.stop().then(() => {
-            document.getElementById("loadingSpinner").style.display = "flex";
-            google.script.run.withSuccessHandler(function(response) {
-              if(response){
-                document.getElementById("term").value = response[0][0];
-                document.getElementById("selectsubject").value = response[0][1];
-                document.getElementById("online").innerHTML = "<span style='font-size:1.2rem; color:#1DB446;'><i class='fa fa-user'></i> กำลังออนไลน์</span>";
-                document.getElementById("loadingSpinner").style.display = "none";
-              } else {
-                document.getElementById("loadingSpinner").style.display = "none";
-                Swal.fire({ icon: "error", title: "ไม่ถูกต้อง", text: "คิวอาร์โค้ดรายวิชาไม่ถูกต้อง" });
-              }
-              closeQRModal();
-            }).verifyQRCode(decodedText);
-          });
-        }, (err) => {}
-      ).catch((err) => {
-        Swal.fire({ icon: 'error', title: 'ไม่อนุญาตใช้กล้อง', text: 'กรุณาอนุญาตให้แอปเข้าถึงกล้องถ่ายรูป' }).then(() => closeQRModal());
-      });
-    }
   </script>
 </body>
 </html>

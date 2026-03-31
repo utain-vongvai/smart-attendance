@@ -298,38 +298,73 @@
       } catch (error) { console.error(error); }
     }
 
+// ==========================================
+    // ระบบสแกน QR Code (อัปเกรดใหม่)
+    // ==========================================
     let scanner;
+    let isScanning = false;
+
     function openQRModal() {
-      if(document.getElementById("isMobilephone").value=="true"){
+      if(document.getElementById("isMobilephone").value == "true"){
         document.getElementById("qrModal").style.display = "flex";
+        
+        // ปรับขนาดกรอบเป็น 250 ให้พอดีกับหน้าจอมือถือทุกรุ่น
         scanner = new Html5Qrcode("reader");
-        scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 500 }, async (decodedText) => {
-            scanner.stop().then(async () => {
-                document.getElementById("loadingSpinner").style.display = "flex";
-                try {
-                  const response = await callAPI('verifyQRCode', { decodedText: decodedText });
-                  document.getElementById("loadingSpinner").style.display = "none";
-                  if(response && response.length > 0){
-                      document.getElementById("term").value = response[0][0];
-                      document.getElementById("selectsubject").value = response[0][1];
-                      document.getElementById("online").innerHTML = "<p style='font-size:32px'><i class='fa fa-user' style='font-size:32px;color:Green'></i> กำลังออนไลน์</p>";
-                  }else{
-                    Swal.fire({ icon: "error", title: "Oops !!!", text: "คิวอาร์โค้ดไม่ถูกต้อง", customClass: { popup: 'swal2-popup' }, allowOutsideClick: false });
+        isScanning = true;
+        
+        scanner.start(
+          { facingMode: "environment" }, 
+          { fps: 10, qrbox: 250 }, 
+          async (decodedText) => {
+              // เมื่อสแกนติดแล้ว ให้ตัดการทำงานซ้ำทันที
+              if(isScanning) {
+                  isScanning = false; 
+                  
+                  // ปิดกล้องก่อนเลย เพื่อไม่ให้ระบบค้าง
+                  try { await scanner.stop(); } catch(e) {} 
+                  
+                  document.getElementById("qrModal").style.display = "none";
+                  document.getElementById("loadingSpinner").style.display = "flex";
+                  
+                  try {
+                    // ส่งข้อมูลไปตรวจที่ Google Sheet
+                    const response = await callAPI('verifyQRCode', { decodedText: decodedText });
+                    document.getElementById("loadingSpinner").style.display = "none";
+                    
+                    if(response && response.length > 0){
+                        // แกะข้อมูลที่ได้มาใส่ในช่อง
+                        document.getElementById("term").value = response[0][0];
+                        document.getElementById("selectsubject").value = response[0][1];
+                        document.getElementById("online").innerHTML = "<p style='font-size:32px'><i class='fa fa-user' style='font-size:32px;color:Green'></i> กำลังออนไลน์</p>";
+                    } else {
+                      Swal.fire({ icon: "error", title: "ไม่ถูกต้อง", text: "คิวอาร์โค้ดรายวิชาไม่ถูกต้อง", allowOutsideClick: false });
+                    }
+                  } catch(e) {
+                    document.getElementById("loadingSpinner").style.display = "none";
+                    Swal.fire({ icon: "error", title: "ข้อผิดพลาด", text: "ไม่สามารถตรวจสอบ QR Code ได้" });
                   }
-                } catch(e) {
-                  document.getElementById("loadingSpinner").style.display = "none";
-                  Swal.fire({ icon: "error", title: "Error", text: "ตรวจสอบ QR Code ไม่ได้", customClass: { popup: 'swal2-popup' } });
-                }
-                closeQRModal();
-            });
-        }, (err) => { console.log(err); }).catch((err) => { alert("ผู้ใช้ปฏิเสธกล้อง"); closeQRModal(); });
-      } else { Swal.fire({title: "แจ้งเตือน", text: "สมาร์ทโฟนเท่านั้น !!!", icon: "warning"}); }
+              }
+          }, 
+          (errorMessage) => { 
+             // ไม่ต้องแสดง Error ตอนกำลังหา QR Code เพื่อป้องกันการกระตุก
+          }
+        ).catch((err) => {
+          Swal.fire({title: "ข้อผิดพลาด", text: "ไม่สามารถเปิดกล้องได้ หรือผู้ใช้ปฏิเสธการเข้าถึงกล้อง", icon: "error"});
+          closeQRModal();
+        });
+      } else { 
+        Swal.fire({title: "แจ้งเตือน", text: "ใช้สมาร์ทโฟนในการเข้าใช้งานเท่านั้น !!!", icon: "warning"}); 
+      }
     }
 
     function closeQRModal() {
+        isScanning = false;
         document.getElementById("qrModal").style.display = "none"; 
-        if (scanner) { scanner.stop().catch(err => console.log(err)); }
+        if (scanner) { 
+            scanner.stop().catch(err => console.log(err)); 
+        }
     }
+    
     document.getElementById("cancelBtn").addEventListener("click", closeQRModal);
   </script>
 </body>

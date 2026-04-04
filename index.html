@@ -1010,13 +1010,11 @@
       if (document.getElementById("guid").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาด 'Device id'", icon: "warning"}); return; }
       
       const formObject = getFormDataAsObject(formNode);
-
+      Swal.fire({ title: 'กำลังตรวจสอบข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
       if (document.getElementById("isInArea").value !== "true") {
         await callAPI('SubmitLogs', { formObject: formObject });
         Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาดตำแหน่งที่ตั้ง (Location)", icon: "error"}); return;
       }
-
-      Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
       try {
         const result = await callAPI('addnewdata', { formObject: formObject });

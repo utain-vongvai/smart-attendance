@@ -1008,6 +1008,7 @@
       if (document.getElementById("ip-address").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาด 'IP'", icon: "warning"}); return; }
       if (document.getElementById("term").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาดข้อมูล 'ภาคเรียน'", icon: "warning"}); return; }
       if (document.getElementById("guid").value.length === 0) { Swal.fire({title: "แจ้งเตือน", text: "พบข้อผิดพลาด 'Device id'", icon: "warning"}); return; }
+      if (!document.getElementById("accept").checked) { Swal.fire({title: "แจ้งเตือน", text: "กรุณากด 'ยอมรับเงื่อนไข' ก่อนเช็คชื่อ", icon: "warning"}); return; }
       
       const formObject = getFormDataAsObject(formNode);
       Swal.fire({ title: 'กำลังตรวจสอบข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
